@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Text, DateTime, ForeignKey
+from sqlalchemy import Column, Integer, String, Text, DateTime, ForeignKey, Boolean
 from sqlalchemy.orm import relationship
 
 from database import Base
@@ -13,7 +13,8 @@ class Todo(Base):
     user_id = Column(Integer, ForeignKey("user.id"), nullable=True)
     user = relationship("User", backref="todo_users")
     modify_date = Column(DateTime, nullable=True)
-
+    #달성여부 체크
+    completed = Column(Boolean, default=False)
 
 class User(Base):
     __tablename__ = "user"

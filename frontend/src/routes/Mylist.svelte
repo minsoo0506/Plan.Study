@@ -47,7 +47,7 @@
         <tr class="text-center table-info">
             <th>번호</th>
             <th style="width:50%">제목</th>
-            <th>글쓴이</th>
+            <th>달성여부</th>
             <th>작성일시</th>
         </tr>
         </thead>
@@ -61,7 +61,8 @@
                 <span class="text-danger small mx-2">{todo.comments.length}</span>
                 {/if}
             </td>
-            <td>{ todo.user ? todo.user.username : "" }</td>
+            <!--<td>{ todo.user ? todo.user.username : "" }</td>-->
+            <td><input type="checkbox" bind:checked={todo.completed}></td>
             <td>{moment(todo.create_date).format("YYYY년 MM월 DD일 hh:mm a")}</td>
         </tr>
         {/each}
