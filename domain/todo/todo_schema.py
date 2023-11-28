@@ -10,6 +10,7 @@ class Todo(BaseModel):
     create_date: datetime.datetime
     user: User | None
     modify_date: datetime.datetime | None = None
+    completed : bool
 
     class Config:
         orm_mode = True

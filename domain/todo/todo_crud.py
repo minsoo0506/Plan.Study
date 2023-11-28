@@ -13,11 +13,11 @@ def get_todo_list(db: Session, skip: int = 0, limit: int = 10, keyword: str = ''
             .outerjoin(User) \
             .filter(Todo.subject.ilike(search) |  # 질문제목
                     Todo.content.ilike(search) |  # 질문내용
-                    User.username.ilike(search)  # 질문작성자
+                    User.username.ilike(search)  # 작성자(삭제 예정)
                     )
     total = todo_list.distinct().count()
     todo_list = todo_list.order_by(Todo.create_date.desc()) \
-        .offset(skip).limit(limit).distinct().all()
+        .offset(skip).limit(limit).distinct().all() # desc : 내림차순 정렬
     return total, todo_list  # (페이징 적용된 질문 목록, 전체 건수)
 
 
