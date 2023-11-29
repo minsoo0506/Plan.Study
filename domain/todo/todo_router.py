@@ -45,6 +45,19 @@ def todo_update(_todo_update: todo_schema.TodoUpdate,
                             detail="수정 권한이 없습니다.")
     todo_crud.update_todo(db=db, db_todo=db_todo,todo_update=_todo_update)
 
+@router.put("/update_completed", status_code=status.HTTP_204_NO_CONTENT)
+def update_completed(_todo_update_completed: todo_schema.TodoUpdateCompleted,
+                     db: Session = Depends(get_db),
+                     current_user: User = Depends(get_current_user)):
+    db_todo = todo_crud.get_todo(db, todo_id=_todo_update_completed.todo_id)
+    if not db_todo:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
+                            detail="데이터를 찾을수 없습니다.")
+    if current_user.id != db_todo.user.id:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
+                            detail="수정 권한이 없습니다.")
+    todo_crud.update_todo_completed(db=db, todo_id=_todo_update_completed.todo_id, completed=_todo_update_completed.completed)
+
 
 @router.delete("/delete", status_code=status.HTTP_204_NO_CONTENT)
 def todo_delete(_todo_delete: todo_schema.TodoDelete,

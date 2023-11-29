@@ -42,6 +42,11 @@ def update_todo(db: Session, db_todo: Todo, todo_update: TodoUpdate):
     db.add(db_todo)
     db.commit()
 
+def update_todo_completed(db: Session, todo_id: int, completed: bool):
+    db_todo = db.query(Todo).get(todo_id)
+    if db_todo is not None:
+        db_todo.completed = completed
+        db.commit()
 
 def delete_todo(db: Session, db_todo: Todo):
     db.delete(db_todo)

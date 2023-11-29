@@ -34,6 +34,9 @@ class TodoList(BaseModel):
 class TodoUpdate(TodoCreate):
     todo_id: int
 
+class TodoUpdateCompleted(BaseModel):
+    todo_id: int
+    completed: bool
 
 class TodoDelete(BaseModel):
     todo_id: int

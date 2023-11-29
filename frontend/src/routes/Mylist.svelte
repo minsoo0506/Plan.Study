@@ -6,6 +6,7 @@
     moment.locale('ko')
 
     let todo_list = []
+    let completed = []
     let size = 10
     let total = 0
     let kw = ''
@@ -19,8 +20,19 @@
         }
         fastapi('get', '/api/todo/list', params, (json) => {
             todo_list = json.todo_list
+            completed = todo_list.map(todo => todo.completed == 1)
             total = json.total
             kw = $keyword
+        })
+    }
+
+    function updateCompleted(todo, event) {
+        let params = {
+            todo_id: todo.id,
+            completed: event.target.checked,
+        }
+        fastapi('put', '/api/todo/update_completed', params, (json) => {
+            get_todo_list()
         })
     }
 
@@ -31,7 +43,8 @@
     <div class="row my-3">
         <div class="col-6">
             <a use:link href="/todo-create"
-                class="btn btn-primary {$is_login ? '' : 'disabled'}">할 일 등록하기</a>
+                class="btn btn-primary {$is_login ? '' : 'disabled'}">Let's Plan!
+            </a>
         </div>
         <div class="col-6">
             <div class="input-group">
@@ -45,9 +58,9 @@
     <table class="table">
         <thead>
         <tr class="text-center table-info">
-            <th>번호</th>
+            <th>no.</th>
             <th style="width:50%">제목</th>
-            <th>달성여부</th>
+            <th>완료 <i class="bi bi-bookmark-check"></i></th> <!-- 수정된 부분 -->
             <th>작성일시</th>
         </tr>
         </thead>
@@ -62,8 +75,11 @@
                 {/if}
             </td>
             <!--<td>{ todo.user ? todo.user.username : "" }</td>-->
-            <td><input type="checkbox" bind:checked={todo.completed}></td>
-            <td>{moment(todo.create_date).format("YYYY년 MM월 DD일 hh:mm a")}</td>
+            <td>
+                <input type="checkbox" id="completed-{i}" bind:checked={todo.completed} on:change="{(event) => updateCompleted(todo, event)}">
+                <label for="completed-{i}">{todo.completed ? '완료' : '진행중'}</label>
+            </td>
+            <td>{moment(todo.create_date).format("YYYY년 MM월 DD일")}</td>
         </tr>
         {/each}
         </tbody>
