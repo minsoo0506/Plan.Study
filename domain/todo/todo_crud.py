@@ -2,6 +2,7 @@ from datetime import datetime
 
 from domain.todo.todo_schema import TodoCreate, TodoUpdate
 from models import Todo, User
+from sqlalchemy import asc, desc
 from sqlalchemy.orm import Session
 
 
@@ -16,7 +17,7 @@ def get_todo_list(db: Session, skip: int = 0, limit: int = 10, keyword: str = ''
                     User.username.ilike(search)  # 작성자(삭제 예정)
                     )
     total = todo_list.distinct().count()
-    todo_list = todo_list.order_by(Todo.create_date.desc()) \
+    todo_list = todo_list.order_by(asc(Todo.completed), desc(Todo.create_date)) \
         .offset(skip).limit(limit).distinct().all() # desc : 내림차순 정렬
     return total, todo_list  # (페이징 적용된 질문 목록, 전체 건수)
 

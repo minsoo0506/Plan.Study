@@ -60,7 +60,7 @@
         <tr class="text-center table-info">
             <th>no.</th>
             <th style="width:50%">제목</th>
-            <th>완료 <i class="bi bi-bookmark-check"></i></th> <!-- 수정된 부분 -->
+            <th>달성 <i class="bi bi-bookmark-check"></i></th> <!-- 수정된 부분 -->
             <th>작성일시</th>
         </tr>
         </thead>
