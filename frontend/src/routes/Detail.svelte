@@ -2,7 +2,9 @@
     import fastapi from "../lib/api"
     import Error from "../components/Error.svelte"
     import { link, push } from 'svelte-spa-router'
+    import Editor from 'cl-editor/src/Editor.svelte'
     import { is_login, username } from "../lib/store"
+    import { marked } from 'marked'
     import moment from 'moment/min/moment-with-locales'
     moment.locale('ko')
 
@@ -40,10 +42,13 @@
 
 <div class="container my-3">
     <!-- 질문 -->
-    <h2 class="border-bottom py-2">{todo.subject}</h2>
+    <h2 class="border-bottom py-2 d-flex justify-content-between align-items-center">
+        {todo.subject}
+        <span class="text-secondary fs-6">{todo.category}</span> <!-- Display the category at the right end of the title -->
+    </h2>
     <div class="card my-3">
         <div class="card-body">
-            <p>{todo.content}</p>
+            {@html marked.parse(todo.content)}
             <div class="d-flex justify-content-end">
                 {#if todo.modify_date }
                 <div class="badge bg-light text-dark p-2 text-start mx-3">

@@ -26,12 +26,15 @@ def get_todo(db: Session, todo_id: int):
     todo = db.query(Todo).get(todo_id)
     return todo
 
+def get_todos_by_user_id(db: Session, user_id: int):
+    return db.query(Todo).filter(Todo.user_id == user_id).all()
 
 def create_todo(db: Session, todo_create: TodoCreate, user: User):
     db_todo = Todo(subject=todo_create.subject,
                    content=todo_create.content,
                    create_date=datetime.now(),
-                   user=user)
+                   user=user,
+                   category=todo_create.category)
     db.add(db_todo)
     db.commit()
 
@@ -40,6 +43,7 @@ def update_todo(db: Session, db_todo: Todo, todo_update: TodoUpdate):
     db_todo.subject = todo_update.subject
     db_todo.content = todo_update.content
     db_todo.modify_date = datetime.now()
+    db_todo.category = todo_update.category
     db.add(db_todo)
     db.commit()
 

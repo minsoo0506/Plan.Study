@@ -13,8 +13,8 @@ class Todo(Base):
     user_id = Column(Integer, ForeignKey("user.id"), nullable=True)
     user = relationship("User", backref="todo_users")
     modify_date = Column(DateTime, nullable=True)
-    #달성여부 체크
     completed = Column(Boolean, default=False)
+    category = Column(String, nullable=False)
 
 class User(Base):
     __tablename__ = "user"

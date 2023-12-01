@@ -60,7 +60,8 @@
         <tr class="text-center table-info">
             <th>no.</th>
             <th style="width:50%">제목</th>
-            <th>달성 <i class="bi bi-bookmark-check"></i></th> <!-- 수정된 부분 -->
+            <th>카테고리</th>
+            <th>달성 <i class="bi bi-bookmark-check"></i></th> 
             <th>작성일시</th>
         </tr>
         </thead>
@@ -74,7 +75,7 @@
                 <span class="text-danger small mx-2">{todo.comments.length}</span>
                 {/if}
             </td>
-            <!--<td>{ todo.user ? todo.user.username : "" }</td>-->
+            <td><span class="text-secondary">{todo.category}</span></td>
             <td>
                 <input type="checkbox" id="completed-{i}" bind:checked={todo.completed} on:change="{(event) => updateCompleted(todo, event)}">
                 <label for="completed-{i}">{todo.completed ? '완료' : '진행중'}</label>

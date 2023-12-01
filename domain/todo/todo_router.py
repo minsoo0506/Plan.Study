@@ -25,6 +25,29 @@ def todo_detail(todo_id: int, db: Session = Depends(get_db)):
     todo = todo_crud.get_todo(db, todo_id=todo_id)
     return todo
 
+@router.get("/user-data/{username}")
+def get_user_data(username: str, db: Session = Depends(get_db)): # use username instead of user_id
+    user = db.query(User).filter(User.username == username).first() # use username instead of user_id
+    if user is None:
+        raise HTTPException(status_code=404, detail="User not found")
+    todos = todo_crud.get_todos_by_user_id(db, user.id) # use user.id instead of user_id
+    total_list_count = len(todos)
+    completed_count = sum(1 for todo in todos if todo.completed)
+    completion_rate = completed_count / total_list_count * 100 if total_list_count > 0 else 0
+    category_counts = {}
+    for todo in todos:
+        if todo.category in category_counts:
+            category_counts[todo.category] += 1
+        else:
+            category_counts[todo.category] = 1
+    return {
+        'username': user.username, # add this line
+        'userId': user.id, # use user.id instead of user_id
+        'totalListCount': total_list_count,
+        'completionRate': completion_rate,
+        'categoryCounts': category_counts,
+    }
+
 @router.post("/create", status_code=status.HTTP_204_NO_CONTENT)
 def todo_create(_todo_create: todo_schema.TodoCreate,
                 db: Session = Depends(get_db),

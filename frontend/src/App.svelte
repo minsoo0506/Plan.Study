@@ -8,6 +8,7 @@
   import UserCreate from "./routes/UserCreate.svelte"
   import UserLogin from "./routes/UserLogin.svelte"
   import TodoModify from "./routes/TodoModify.svelte"
+  import Mypage from "./routes/Mypage.svelte"
 
   const routes = {
     '/': Home,
@@ -17,6 +18,7 @@
     '/user-create': UserCreate,
     '/user-login': UserLogin,
     '/todo-modify/:todo_id': TodoModify,
+    '/mypage': Mypage,
   }
 </script>
 
