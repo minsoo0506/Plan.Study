@@ -6,8 +6,12 @@ from sqlalchemy import asc, desc, func
 from sqlalchemy.orm import Session
 
 
-def get_todo_list(db: Session, skip: int = 0, limit: int = 10, keyword: str = ''):
+def get_todo_list(db: Session, skip: int = 0, limit: int = 10, keyword: str = '', username: str = ''):
     todo_list = db.query(Todo)
+    if username:
+        user = db.query(User).filter(User.username == username).first()
+        if user:
+            todo_list = todo_list.filter(Todo.user_id == user.id)
     if keyword:
         search = '%%{}%%'.format(keyword)
         todo_list = todo_list \
@@ -35,8 +39,11 @@ def get_user_ranking(db: Session, user_id: int):
     # Sort the counts in descending order
     sorted_todo_counts = sorted(all_users_todo_count, key=lambda x: x[1], reverse=True)
     # Find the rank of the current user
-    user_rank = [index for index, user in enumerate(sorted_todo_counts) if user[0] == user_id][0] + 1
-    return user_rank
+    user_ranks = [index for index, user in enumerate(sorted_todo_counts) if user[0] == user_id]
+    if user_ranks:
+        return user_ranks[0] + 1
+    else:
+        return None  # 또는 적절한 기본값
 
 def create_todo(db: Session, todo_create: TodoCreate, user: User):
     db_todo = Todo(subject=todo_create.subject,

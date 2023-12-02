@@ -11,6 +11,10 @@ from database import get_db
 from domain.user import user_crud, user_schema
 from domain.user.user_crud import pwd_context
 
+from typing import List
+from domain.user.user_schema import User
+from models import User
+
 ACCESS_TOKEN_EXPIRE_MINUTES = 60 * 24
 SECRET_KEY = "4ab2fce7a6bd79e1c014396315ed322dd6edb1c5d975c6b74a2904135172c03c"
 ALGORITHM = "HS256"
@@ -76,3 +80,8 @@ def get_current_user(token: str = Depends(oauth2_scheme),
         if user is None:
             raise credentials_exception
         return user
+
+@router.get("/search/{keyword}", response_model=List[user_schema.User])
+def search_user(keyword: str, db: Session = Depends(get_db)):
+    users = db.query(User).filter(User.username.contains(keyword)).all()
+    return users

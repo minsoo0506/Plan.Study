@@ -35,7 +35,7 @@
 </script>
 
 <div class="container">
-    <h5 class="my-3 border-bottom pb-2">할일 수정</h5>
+    <h5 class="my-3 border-bottom pb-2">공부 계획 수정</h5>
     <Error error={error} />
     <form method="post" class="my-3">
         <div class="mb-3">

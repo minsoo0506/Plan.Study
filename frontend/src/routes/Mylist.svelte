@@ -1,7 +1,7 @@
 <script>
     import fastapi from "../lib/api"
     import { link, push } from 'svelte-spa-router'
-    import { page, keyword, is_login } from "../lib/store"
+    import { page, keyword, is_login, access_token, username } from "../lib/store"
     import moment from 'moment/min/moment-with-locales'
     moment.locale('ko')
 
@@ -17,6 +17,7 @@
             page: $page,
             size: size,
             keyword: $keyword,
+            username: $username, 
         }
         fastapi('get', '/api/todo/list', params, (json) => {
             todo_list = json.todo_list

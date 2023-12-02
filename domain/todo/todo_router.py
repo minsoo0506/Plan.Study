@@ -12,9 +12,9 @@ router = APIRouter(
 )
 
 @router.get("/list", response_model=todo_schema.TodoList)
-def todo_list(db: Session = Depends(get_db), page: int = 0, size: int = 10, keyword: str = ''):
+def todo_list(db: Session = Depends(get_db), page: int = 0, size: int = 10, keyword: str = '', username: str = ''):
     total, _todo_list = todo_crud.get_todo_list(
-        db, skip=page * size, limit=size, keyword=keyword)
+        db, skip=page * size, limit=size, keyword=keyword, username=username)
     return {
         'total': total,
         'todo_list': _todo_list
@@ -34,12 +34,13 @@ def get_user_data(username: str, db: Session = Depends(get_db)):
     total_list_count = len(todos)
     completed_count = sum(1 for todo in todos if todo.completed)
     completion_rate = completed_count / total_list_count * 100 if total_list_count > 0 else 0
-    category_counts = {}
+    # 모든 카테고리를 미리 정의한다.
+    all_categories = ['철학', '종교', '사회학', '언어', '자연과학', '기술과학', '예술', '문학', '역사', '기타']
+    # category_counts 딕셔너리를 생성하고 모든 카테고리를 0으로 초기화한다.
+    category_counts = {category: 0 for category in all_categories}
     for todo in todos:
         if todo.category in category_counts:
             category_counts[todo.category] += 1
-        else:
-            category_counts[todo.category] = 1
     user_rank = todo_crud.get_user_ranking(db, user.id)
     return {
         'username': user.username,

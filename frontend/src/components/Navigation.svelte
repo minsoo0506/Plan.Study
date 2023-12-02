@@ -31,6 +31,9 @@
                         <a use:link class="nav-link" href="/mypage">마이페이지</a>
                     </li>
                     <li class="nav-item">
+                        <a use:link class="nav-link" href="/search">상대방 검색</a>
+                    </li>
+                    <li class="nav-item">
                         <a use:link class="nav-link" href="/user-login" on:click={() => {
                             $access_token = ''
                             $username = ''

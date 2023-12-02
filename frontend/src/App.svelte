@@ -9,6 +9,8 @@
   import UserLogin from "./routes/UserLogin.svelte"
   import TodoModify from "./routes/TodoModify.svelte"
   import Mypage from "./routes/Mypage.svelte"
+  import Search from "./routes/Search.svelte"
+  import Otherpage from './routes/Otherpage.svelte'
 
   const routes = {
     '/': Home,
@@ -19,6 +21,8 @@
     '/user-login': UserLogin,
     '/todo-modify/:todo_id': TodoModify,
     '/mypage': Mypage,
+    '/search': Search,
+    '/otherpage/:username': Otherpage,
   }
 </script>
 

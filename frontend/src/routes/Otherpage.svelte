@@ -4,9 +4,12 @@
     import { is_login, username } from "../lib/store"
     import fastapi from "../lib/api"
     import { get } from 'svelte/store'
+    import { push, location } from 'svelte-spa-router'
+    export let params
 
     Chart.register(DoughnutController, BarController, CategoryScale, LinearScale, ArcElement, BarElement, Title, Tooltip, Legend)
 
+    let otherUsername
     let userData = {}
     let completionChart = null
     let categoryChart = null
@@ -14,14 +17,20 @@
     let categories = ['철학', '종교', '사회학', '언어', '자연과학', '기술과학', '예술', '문학', '역사', '기타']
     let userRank = 0
 
-    async function get_user_data() {
-        if ($is_login) {
-            fastapi('get', `/api/todo/user-data/${$username}`, {}, (json) => {
-                userData = json
-                userRank = userData.userRank
-                categoryCounts = userData.categoryCounts  // 백엔드에서 제공하는 카테고리별 할 일 개수 데이터를 가져온다.
-            })
+    onMount(() => {
+        if (params.username) {
+            otherUsername = params.username;
+            get_user_data();
         }
+    })
+
+    async function get_user_data() {
+        console.log(otherUsername)
+        await fastapi('get', `/api/todo/user-data/${otherUsername}`, {}, (json) => {
+            userData = json
+            userRank = userData.userRank
+            categoryCounts = userData.categoryCounts  // 백엔드에서 제공하는 카테고리별 할 일 개수 데이터를 가져온다.
+        })
     }
 
     const categoryColors = [
@@ -94,10 +103,6 @@
             })
     }
 
-    onMount(async () => {
-        get_user_data()
-    })
-
     afterUpdate(() => {
         if ('completionRate' in userData && 'categoryCounts' in userData) {
             updateCharts()
@@ -105,14 +110,13 @@
     })
 </script>
 
-
 <div class="container mt-5">
     <div class="row">
         <div class="col-lg-6 d-flex">
             <div class="card flex-fill">
                 <div class="card-header bg-primary text-white">User Info</div>
                 <div class="card-body">
-                    <h5 class="card-title">User ID: {$username}</h5>
+                    <h5 class="card-title">User ID: {otherUsername}</h5>
                     <hr class="my-4 bg-light">
                     <h5 class="card-title">User Rank: {userData.userRank !== undefined ? userData.userRank : 'Loading...'}</h5>
                     <p class="text-muted">업로드 된 공부 리스트의 총 개수를 유저들끼리 비교</p>
@@ -147,4 +151,3 @@
         </div>
     </div>
 </div>
-
