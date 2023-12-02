@@ -2,7 +2,7 @@ from datetime import datetime
 
 from domain.todo.todo_schema import TodoCreate, TodoUpdate
 from models import Todo, User
-from sqlalchemy import asc, desc
+from sqlalchemy import asc, desc, func
 from sqlalchemy.orm import Session
 
 
@@ -28,6 +28,15 @@ def get_todo(db: Session, todo_id: int):
 
 def get_todos_by_user_id(db: Session, user_id: int):
     return db.query(Todo).filter(Todo.user_id == user_id).all()
+
+def get_user_ranking(db: Session, user_id: int):
+    # Get the count of todos for all users
+    all_users_todo_count = db.query(User.id, func.count(Todo.id)).join(Todo).group_by(User.id).all()
+    # Sort the counts in descending order
+    sorted_todo_counts = sorted(all_users_todo_count, key=lambda x: x[1], reverse=True)
+    # Find the rank of the current user
+    user_rank = [index for index, user in enumerate(sorted_todo_counts) if user[0] == user_id][0] + 1
+    return user_rank
 
 def create_todo(db: Session, todo_create: TodoCreate, user: User):
     db_todo = Todo(subject=todo_create.subject,
