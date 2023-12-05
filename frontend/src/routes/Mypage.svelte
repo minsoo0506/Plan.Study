@@ -114,7 +114,7 @@
                 <div class="card-body">
                     <h5 class="card-title">User ID: {$username}</h5>
                     <hr class="my-4 bg-light">
-                    <h5 class="card-title">User Rank: {userData.userRank !== undefined ? userData.userRank : 'Loading...'}</h5>
+                    <h5 class="card-title">User Rank: {(userData.userRank !== undefined) ? userData.userRank : 'Loading...'}</h5>
                     <p class="text-muted">업로드 된 공부 리스트의 총 개수를 유저들끼리 비교</p>
                 </div>
             </div>

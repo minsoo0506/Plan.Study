@@ -42,6 +42,9 @@ def get_user_data(username: str, db: Session = Depends(get_db)):
         if todo.category in category_counts:
             category_counts[todo.category] += 1
     user_rank = todo_crud.get_user_ranking(db, user.id)
+    total_user_count = db.query(User).count()
+    # user_rank가 None이면 최하위 순위로 설정한다.
+    user_rank = user_rank if user_rank is not None else total_user_count
     return {
         'username': user.username,
         'userId': user.id,
