@@ -58,7 +58,7 @@
     </div>
     <table class="table">
         <thead>
-        <tr class="text-center table-info">
+        <tr class="text-center table-primary">
             <th>no.</th>
             <th style="width:50%">제목</th>
             <th>카테고리</th>
@@ -71,7 +71,7 @@
         <tr class="text-center">
             <td>{ total - ($page * size) - i }</td>
             <td class="text-center">
-                <a use:link href="/detail/{todo.id}">{todo.subject}</a>
+                <a use:link href="/detail/{todo.id}" style="color: black; font-weight: bold; text-decoration: none;">{todo.subject}</a>
                 {#if todo.comments && todo.comments.length > 0 }
                 <span class="text-danger small mx-2">{todo.comments.length}</span>
                 {/if}
