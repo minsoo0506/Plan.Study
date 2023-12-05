@@ -9,10 +9,12 @@
     let error = {detail:[]}
     let subject = ''
     let content = ''
+    let category = ''
     
     fastapi("get", "/api/todo/detail/" + todo_id, {}, (json) => {
         subject = json.subject
         content = json.content
+        category = json.category
     })
     
     function update_todo(event) {
@@ -22,6 +24,7 @@
             todo_id: todo_id,
             subject: subject,
             content: content,
+            category: category,
         }
         fastapi('put', url, params, 
             (json) => {
@@ -41,6 +44,22 @@
         <div class="mb-3">
             <label for="subject">제목</label>
             <input type="text" class="form-control" bind:value="{subject}">
+        </div>
+        <div class="mb-3">
+            <label for="category">카테고리</label>
+            <select class="form-control" bind:value="{category}">
+                <option value="" disabled selected>공부 분야 선택</option>
+                <option>철학</option>
+                <option>종교</option>
+                <option>사회학</option>
+                <option>언어</option>
+                <option>자연과학</option>
+                <option>기술과학</option>
+                <option>예술</option>
+                <option>문학</option>
+                <option>역사</option>
+                <option>기타</option>
+            </select>
         </div>
         <div class="mb-3">
             <label for="content">내용</label>
